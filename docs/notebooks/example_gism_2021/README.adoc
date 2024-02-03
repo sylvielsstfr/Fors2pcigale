@@ -1,0 +1,149 @@
+CIGALE hands-on session
+=======================
+:sectnums:
+:source-highlighter: rouge
+:Date: July 2021
+
+This repository contains the material and documentation for the CIGALE hands-on
+session of the link:https://ismgalaxies2021.sciencesconf.org/[International
+Summer School on the Interstellar Medium of Galaxies, from the Epoch of
+Reionization to the Milky Way].
+
+## Getting the hands-on repository
+
+First, your must get the content of this repository.  The easiest way to do it
+is to use `git`:
+
+[source, shell]
+----
+$ git clone https://gitlab.lam.fr/cigale/teaching_materials/gism_2021.git
+$ cd gism_2021
+----
+
+You can also download an archive of the repository with the download at the top
+of link:https://gitlab.lam.fr/cigale/teaching_materials/gism_2021/[this
+page] (at the left of the clone one).
+
+We may update the repository before the school starts; so it's better to use the
+`git` method and pull the changes when the hands-on session starts.
+
+## Setting up the environment
+
+First, we need a Python environment with CIGALE installed for the hands-on
+session.  We are presenting two ways to ways to install the needed packages:
+using `conda` and using `pip`.  If you are *new to Python* or are already using
+Conda / Anaconda, use the first method.  If you are already using Python without
+Conda, you can follow the second one.
+
+### Setting up the environment using `conda`
+
+#### Pre-requisites
+
+You need to have Conda installed.  Conda is a cross-platform package manager for
+Python but also for other languages like R, Ruby, etc.  It allows you to create
+isolated environments to work in.
+
+If you don't have Conda installed, we advise you to use the _miniconda_
+installer you can download from
+link:https://docs.conda.io/en/latest/miniconda.html[this page].  While you can
+use any of the _miniconda_ version, we suggest you get the last Python 3
+version.
+
+This installer will guide you during the installation process.
+
+#### Creating the environment
+
+We are creating a `ism2021` environment in which we are installing everything
+needed for the hands-on session.
+
+[source, shell]
+----
+$ conda create --name ism2021 python=3.9
+$ conda activate ism2021
+$ conda install numpy scipy astropy sqlalchemy configobj matplotlib jupyterlab ipympl
+----
+
+As you can see, before using an environment with conda, you first have to
+activate it.  You must activate the `ism2021` before installing CIGALE and
+before running the hands-on session.
+
+Once you activate en environment in your terminal, you _stay_ in this
+environment for the terminal session.  You should see the name of the
+environment in your command prompt.
+
+You can now switch to the section dealing with CIGALE installation.
+
+### For those preferring regular `pip`
+
+If you are not using `conda` and prefer to use directly `pip` (because you are
+using _virtualenvs_ or _pyenv_ for instance) you must have a Python 3.8 or 3.9
+environment.  Installing CIGALE will pull all its dependencies, but you still
+have to install _Jupyterlab_ to display the notebooks.
+
+[source, shell]
+----
+$ pip install jupyterlab ipypml
+----
+
+## Installing CIGALE
+
+We are installing CIGALE from its sources we get from LAM's Gitlab.
+
+[NOTE]
+===============================
+Building CIGALE takes a lot of temporary space.  That's why we use `TMPDIR=.` to
+use the local directory for temporary file storage during install.
+===============================
+
+[source, shell]
+----
+$ curl -O https://gitlab.lam.fr/cigale/cigale/-/archive/ism_school_2021/cigale-ism_school_2021.tar.bz2
+$ TMPDIR=. pip install ./cigale-ism_school_2021.tar.bz2
+----
+
+It will take some time to build the database and install CIGALE.  Once this is
+finished, you can delete the `cigale-ism_school_2021.tar.bz2` as it's not used
+anymore.
+
+[NOTE]
+===============================
+If the installation using this method fails because there is not enough disk
+space or memory, you can install it in _editable_ mode.
+
+[source, shell]
+----
+$ tar xf cigale-ism_school_2021.tar.bz2
+$ cd cigale-ism_school_2021
+$ pip install -e .
+$ python database_builder/__init__.py
+----
+
+In that case, you *must not* delete the `cigale-ism_school_2021` folder (but you
+can delete the `tar.bz2` file).
+===============================
+
+## CIGALE SED Buiding Introduction
+
+The notebook `cigale_introduction.ipynb` is an introduction to how CIGALE build
+the SEDs.  To display and execute it, you must run the `jupyter lab` command
+inside the hands-on repository, this will spawn a browser and you can select the
+notebook file in the file browser at the left.
+
+## Exercice run
+
+The `exercise` folder contains the catalogue of the KINGFISH galaxies that is
+used for the hands-on session.  The documentation of the session is in
+`hands_on_project_CIGALE.pdf`.  Open a terminal into the `exercise` folder and
+activate the `ism2021` environment before proceeding with the session.
+
+## Manual fitting
+
+With the notebook `cigale_manual_fitting.ipynb` you can play and try to manually
+adjust the KINGFISH galaxies you worked on in the exercise run.  It's also
+a good way to further explore the effect on the fit of the SED parameters.
+
+## Cleaning up things...
+
+As the CIGALE installation takes a lot of space, you may want to remove the
+`ism2021` environment after the session.  To do this, execute this command:
+`conda env remove -n ism2021`.
