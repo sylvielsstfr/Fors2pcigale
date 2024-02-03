@@ -1,0 +1,10 @@
+# Changes here will be overwritten by Copier
+_commit: v1.4.6
+_src_path: gh:lincc-frameworks/python-project-template
+author_email: sylvie.dagoret-campagne@ijclab.in2p3.fr
+author_name: Sylvie Dagoret-Campagne
+custom_install: false
+package_name: fors2pcigale
+project_license: MIT
+project_name: fors2pcigale
+project_organization: sylvielsstfr
