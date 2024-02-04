@@ -17,6 +17,26 @@ you whether or not you'd like to display it!
 For more information about the project template see the 
 [documentation](https://lincc-ppt.readthedocs.io/en/latest/).
 
+
+## Introduction
+
+
+This package is dedicated to run SED fitting on Fors2 data ``CIGALE``,
+which's accronym means CIGALE means **Code Investigating GALaxy Emission**.
+The package implemented in python is refered as ``pcigale``.
+
+
+### CIGALE code
+
+The top page for [pcigale](https://cigale.lam.fr/).
+The ``cigale`` documentation can be found at [https://cigale.lam.fr/documentation/](https://cigale.lam.fr/documentation/).
+
+The installation of ``pcigale`` requires a python environnement with the packages:
+
+- ``astropy numpy scipy matplotlib configobj rich``
+- and for plotting in a notebook environnement :``ipykernel``, ``jupyterlab``, and ``ipympl``.
+
+
 ## Dev Guide - Getting Started
 
 Before installing any dependencies or writing code, it's a great idea to create a
