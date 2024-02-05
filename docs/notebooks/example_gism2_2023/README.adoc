@@ -1,0 +1,332 @@
+CIGALE hands-on session
+=======================
+:sectnums:
+:source-highlighter: rouge
+:Date: July 2023
+
+This repository contains the material and documentation for the CIGALE hands-on
+session of the second link:https://ismgalaxies2023.sciencesconf.org/[International
+Summer School on the Interstellar Medium of Nearby Galaxies].
+
+The slides of the inroduction talk can be found
+link:https://people.lam.fr/roehlly.yannick/talks/gism2_2023/[there].
+
+## Aims of the hands-on session
+
+During this session, you will learn how to install and use CIGALE. You will
+work on a sample of nearby galaxies with observation spanning a good wavelength
+coverage: the Sings/KINGFISH sample.
+
+As an exercise, you will have to perform the SED fitting of this sample and
+then plot the results on a SFR-mass diagram and on a BPT diagram.
+
+## Getting the hands-on repository
+
+First, your must get the content of this repository.  The easiest way to do it
+is to use `git`:
+
+[source, shell]
+----
+$ git clone https://gitlab.lam.fr/cigale/teaching_materials/gism2_2023.git
+$ cd gism2_2023
+----
+
+You can also download an archive of the repository with the download at the top
+of link:https://gitlab.lam.fr/cigale/teaching_materials/gism2_2023/[this
+page] (at the left of the clone one).
+
+We may update the repository before the school starts; so it's better to use the
+`git` method and pull the changes when the hands-on session starts.
+
+## Setting up the environment
+
+First, we need a Python environment with CIGALE installed for the hands-on
+session.  We are presenting two ways to ways to install the needed packages:
+using `conda` and using `pip`.  If you are *new to Python* or are already using
+Conda / Anaconda, use the first method.  If you are already using Python without
+Conda, you can follow the second one.
+
+### Setting up the environment using `conda`
+
+You need to have Conda installed.  Conda is a cross-platform package manager for
+Python but also for other languages like R, Ruby, etc.  It allows you to create
+isolated environments to work in.
+
+If you don't have Conda installed, we advise you to use the _miniconda_
+installer you can download from
+link:https://docs.conda.io/en/latest/miniconda.html[this page].  While you can
+use any of the _miniconda_ version, we suggest you get the last Python 3
+version. This installer will guide you during the installation process.
+
+We are creating a `gism2` environment in which we are installing everything
+needed for the hands-on session.
+
+[source, shell]
+----
+$ conda create --name gism2 python=3
+$ conda activate gism2
+$ conda install numpy scipy astropy sqlalchemy configobj matplotlib rich jupyterlab ipympl ipywidgets
+----
+
+As you can see, before using an environment with conda, you first have to
+activate it.  You must activate the `gism2` before installing CIGALE and before
+running the hands-on session.
+
+Once you activate en environment in your terminal, you _stay_ in this
+environment for the terminal session.  You should see the name of the
+environment in your command prompt.
+
+You can now switch to the section dealing with CIGALE installation.
+
+### For those preferring regular `pip`
+
+If you are not using `conda` and prefer to use directly `pip` (because you are
+using _virtualenvs_ or _pyenv_ for instance) you must have a Python 3.11
+environment.  Installing CIGALE will pull all its dependencies, but you still
+have to install _Jupyterlab_ to display the notebooks.
+
+[source, shell]
+----
+$ pip install jupyterlab ipympl ipywidgets
+----
+
+## Installing CIGALE
+
+We will be using the current version of CIGALE (v2022.1) with some
+modifications:
+
+- Saving the best fitting model will result in one single file with the SFH,
+  the flux and luminosity components, and the photometry;
+- When plotting the PDFs of the parameters, a FITS file is created with the
+  values;
+- The best SED plot is updated compared to the v2022.1 one.
+
+You can download the `pcigale-2022.1.post2-py3-none-any.whl` file from
+link:https://upload.osupytheas.fr/?s=download&token=770d92c9-a9fa-fd1b-4368-0965f87120dd[this
+link] (valid until 2023/08/05).
+
+[NOTE]
+===============================
+If you want to use this content and the `pcigale-2022.1.post2-py3-none-any.whl`
+is not available anymore, you can install the version v2022.1 of CIGALE from
+link:https://cigale.lam.fr[CIGALE web site].
+===============================
+
+Then to install CIGALE you can do:
+
+[source, shell]
+----
+$ pip install pcigale-2022.1.post2-py3-none-any.whl
+----
+
+To test if the install succeeded, you can check if the `pcigale` command
+exists:
+
+[source, shell]
+----
+$ pcigale
+
+                       Code Investigating GALaxy Emission
+                  Boquien et al. (2019) (https://cigale.lam.fr)
+  CIGALE version: 2022.1.post — Python version: 3.11.4 — Platform: linux-x86_64
+
+usage: pcigale [-h] [-c CONFIG_FILE] {init,genconf,check,run} ...
+----
+
+If everything is OK, you may delete `pcigale-2022.1.post2-py3-none-any.whl` if
+you need space.
+
+## Additional tool
+
+If you don't have it, you will want to install
+link:https://www.star.bris.ac.uk/~mbt/topcat/[Topcat] which is a really handy
+tool to manipulate tables.
+
+## Demonstration notebooks
+
+The `notebooks` folder contains two notebooks that demonstrate CIGALE using the
+same modules you will be using in the fitting exercise. In the `gism2`
+environment, execute the `jupyter lab` command. This will launch a browser with
+the JupyterLab interface, you can click on the notebooks to open them.
+
+The `introduction.ipynb` notebook is an introduction to how CIGALE build the
+SEDs. It goes step by step through the process of a SED creation from the Star
+Formation History (SFH) to the red-shifting.
+
+Execute the notebook cell by cell reading the code to understand how CIGALE
+work. At the end, there is an interactive plot where you can change the module
+parameters to experiment how this affect the final spectrum.
+
+The `manual_fitting.ipynb` notebook allows you to perform the SED fitting you
+will be doing automatically, but manually. You just have to execute all the
+cell and go to the end of the notebook to find an interactive widget.
+
+You can select a galaxy and try to adjust the spectrum by modifying the module
+parameters. You may want to do that once you managed to have a good automatic
+fit to use the best model parameters and see how the fit is sensitive to small
+changes in the parameters.
+
+## Exercise: fitting the KINGFISH galaxies
+
+The `exercise` folder contains the catalogue of the KINGFISH galaxies that is
+used for the hands-on session. While on the `gism2` environment, enter the
+folder and do:
+
+[source, shell]
+----
+$ pcigale init
+----
+
+This will create a `pcigale.ini` file (and also a `pcigale.spec` file) that is
+used to configure the run. This file is heavily documented to explain the
+parameters.
+
+For now, you must indicate which file contains the catalogue to analyse, which
+module to use, that you want to perform a PDF analysis, and adjust the number
+of processor cores to use depending on your computer.
+
+[source, ini]
+----
+data_file = Sings_KINGFISH_sample.txt
+sed_modules = sfhdelayed, bc03, nebular, dustatt_modified_starburst, dl2014, redshifting
+analysis_method = pdf_analysis
+core = 5
+----
+
+[NOTE]
+===============================
+We are proposing this list of modules, but if you have some time you can
+experiment with other modules as well.
+===============================
+
+Then do:
+
+[source, shell]
+----
+$ pcigale genconf
+----
+
+This will read the catalogue to find the known bands and compete the
+`pcigale.ini` file with the configuration for each module you want to use.
+
+You must now edit this file to change the possible values for each parameter
+for each module (we will help you). CIGALE will produce the SED corresponding
+to all the possible combinations of parameters. You can use the `pcigale check`
+command to know how many models will be built:
+
+[source, shell]
+----
+$pcigale check
+
+                                                       General information
+ Data file         │ Sings_KINGFISH_sample.txt
+ Parameters file   │ None
+ Number of objects │ 34
+ Redshift          │ 0.00 to 0.00
+ Bands fitted      │ galex (2) — sdss (5) — 2mass (3) — IRAC1 (1) — IRAC2 (1) — IRAC3 (1) [...]
+ Properties fitted │ None
+ Number of models  │ 30240 (30240 per redshift)
+ Cores used        │ 5/12
+ Analysis module   │ pdf_analysis
+
+                           SED modules
+ SFH                  │ sfhdelayed
+ SSP                  │ bc03
+ nebular              │ nebular
+ dust attenuation     │ dustatt_modified_starburst
+ dust emission        │ dl2014
+ AGN                  │ None. Options are: fritz2006, skirtor2016.
+ X-ray                │ None. Options are: xray.
+ radio                │ None. Options are: radio.
+ restframe_parameters │ None. Options are: restframe_parameters.
+ redshifting          │ redshifting
+----
+
+In the `[analysis_params]` section, you will want to set this to save the best
+models and to be able to plot them:
+
+[source, ini]
+----
+save_best_sed = True
+----
+
+Also, to built the BTP diagram you want CIGALE to estimate some line fluxes
+that are not in the catalogue. In the `[analysis_params]` section use that:
+
+[source, ini]
+----
+bands = line.NII-658.3, line.H-alpha, line.OIII-500.7, line.H-beta
+save_chi2 = all
+----
+
+[NOTE]
+===============================
+By default, CIGALE re-estimates the flux in all the bands from the catalogue.
+As we want to be able to plot the probability distribution of the line fluxes
+(`save_chi2 = all`), we remove the catalogue bands from the `bands` parameters
+for the analysis not to have too many files.
+===============================
+
+Then do this to perform the analysis:
+
+[source, shell]
+----
+pcigale run
+----
+
+This will create on `out` directory (it there's one already, it will be
+renamed) with the results. In particular:
+
+- The `results.fits` is the table contains the main results. Open it with
+  Topcat. It contains information from the best fitting models prefixed with
+  `best` and from the Bayesian analysis prefixed with `bayes` (both the
+  weighted mean and the standard deviation). The information for which you have
+  Bayesian values are the content of the `variables` and `bands` parameters in
+  the  `[analysis_params]` section.
+- For each source in the catalogue, you will have a `_best_model.fits` file
+  that contains the parameter of the best model, the various luminosity
+  contributions, the SFH and the photometry. You can open these files with
+  Topcat.
+
+You may want to plot the best models with the `pcigale-plots sed` command and
+the PDFs of the Bayesian analysed parameters with `pcigale-plots pdf`. The
+plots will be in the `out` directory.
+
+After having performed your run, you may want to look for the
+`best.reduced_chi_square` in the result table, if the fit is good, they should
+be around the value of one. You may also want to look at the best model plots.
+You should also look at the PDF of the analysed parameters. They should present
+a pic centered.
+
+The reduced χ² values will tell you if you explored the correct location of the
+parameter space, while the PDFs will tell you explored a parameter space broad
+enough.
+
+You will probably need to adapt the parameters of the analysis and run it
+again.
+
+## SFR-mass and BPT diagram.
+
+Once you managed to have a good fit, you can use the content of the result
+table to make to plots:
+
+- SFR versus mass
+- [NII]6584/Hα versus [OIII]5007/Hβ (BPT diagram)
+
+For the BPT diagram, you may first want to do it with the lines fluxes
+estimated by CIGALE. What do you notice?
+
+In the exercise folder, you will find the lines measurements from Moustakas _et
+al._ (2010) in the `KINGFISH_MoustakasEtAll_lines.fits` file. There are line
+fluxes measured from different observed spectra. You way also want to use these
+line fluxes in the CIGALE fit. You can select the spectrum you prefer to use or
+you can use the `Sings_KINGFISH_sample_with_lines.fits` file that has one row
+per spectrum type to compare the results. You can try to evaluate the
+metallicity and the logU of the KINGFISH galaxies and compare with the values
+found in the literature.
+
+## Cleaning up things...
+
+As the CIGALE installation takes a lot of space, you may want to remove the
+`gism2` environment after the session.  To do this, execute this command:
+`conda env remove -n gism2`.
