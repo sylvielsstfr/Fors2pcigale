@@ -46,6 +46,7 @@ dev = [
     "configobj", # required by pcigale
     "rich", # required by pcigale
     "ipympl", # required by notebooks
+    "tqdm",
     "tables", # required for io and format converter
     "h5py",  # required for io and format converter 
     "pandas", # required for io and format converter 
