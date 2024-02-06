@@ -38,6 +38,24 @@ dev = [
     "nbsphinx", # Used to integrate Python notebooks into Sphinx documentation
     "ipython", # Also used in building notebooks into Sphinx
     "asv==0.6.1", # Used to compute performance benchmarks
+    "numpy", # required by pcigale
+    "astropy", # required by pcigale
+    "matplotlib", # required by pcigale
+    "seaborn",
+    "scipy", # required by pcigale
+    "configobj", # required by pcigale
+    "rich", # required by pcigale
+    "ipympl", # required by notebooks
+    "tqdm",
+    "tables", # required for io and format converter
+    "h5py",  # required for io and format converter 
+    "pandas", # required for io and format converter 
+    "scikit-learn", # required for io and format converter 
+    "jupyter",
+    "openpyxl",
+    "jax", # key package used for autodifferentiation and vectorisation
+    "jaxlib", # key package used for optimisations
+    "jaxopt", # key package used for optimisations
 ]
 
 [build-system]
@@ -65,3 +83,19 @@ line_length = 110
 
 [tool.coverage.run]
 omit=["src/fors2pcigale/_version.py"]
+
+[tool.setuptools.packages.find]
+where = ["src"]  # list of folders that contain the packages (["."] by default)
+include = ["fors2pcigale",
+"for2pcigale.fors2starlightio",
+
+]  
+# package names should match these glob patterns (["*"] by default)
+exclude = ["fors2pcigale.tests*"]  # exclude packages matching these glob patterns (empty by default)
+namespaces = true  # to activate scanning PEP 420 namespaces (true by default)
+
+
+[tool.setuptools.package-data]
+fors2pcigale = ["*.txt"]
+"fors2pcigale.data" = ["*.h5","*.pickle"]
+
