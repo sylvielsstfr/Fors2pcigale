@@ -49,6 +49,7 @@ dev = [
     "tqdm",
     "tables", # required for io and format converter
     "h5py",  # required for io and format converter 
+    "astro-sedpy",
     "pandas", # required for io and format converter 
     "scikit-learn", # required for io and format converter 
     "jupyter",
