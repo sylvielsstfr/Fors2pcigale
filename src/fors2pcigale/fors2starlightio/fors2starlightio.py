@@ -82,7 +82,7 @@ ordered_keys = ['name','num','ra','dec', 'redshift','Rmag','RT', 'RV','eRV','Nsp
 
 FILENAME_FORS2PHOTOM = "data/FORS2spectraGalexKidsPhotom.h5"
 FILENAME_STARLIGHT = "data/SLspectra.h5"
-
+FILEPATH_SEDIMG = "data/seds/IMG"
 
 
 def _getPackageDir():
@@ -96,9 +96,45 @@ def _getPackageDir():
 
 FULL_FILENAME_FORS2PHOTOM = os.path.join(_getPackageDir(),FILENAME_FORS2PHOTOM)
 FULL_FILENAME_STARLIGHT = os.path.join(_getPackageDir(),FILENAME_STARLIGHT)
+FULL_FILEPATH_SEDIMG =  os.path.join(_getPackageDir(),FILEPATH_SEDIMG)
 
+def get_specimg(specname:str) -> np.array:
+    """_retrieve the base image of a fors2 spectrum_
 
+    :param specname: name of the spectrum
+    :type specname: str
+    :return: the image of the spectrum (fluw vs wavelengh)
+    :rtype: np.array
+    """
 
+    num = np.array(int(re.findall("^SPEC(.*)",specname)[0])) 
+    fullfilename_image = os.path.join(FULL_FILEPATH_SEDIMG,f"IMG{num}n.png")
+
+    if os.path.isfile(fullfilename_image):
+        arr = plt.imread(fullfilename_image)
+    else:
+        print(f"Filename {fullfilename_image} not found") 
+        arr = np.array([])
+    return arr
+
+def get_specimgfile(specname:str) -> str:
+    """_retrieve the base image filename and path of a fors2 spectrum_
+
+    :param specname: name of the spectrum
+    :type specname: str
+    :return: the image of the spectrum (fluw vs wavelengh)
+    :rtype: str
+    """
+
+    num = np.array(int(re.findall("^SPEC(.*)",specname)[0])) 
+    fullfilename_image = os.path.join(FULL_FILEPATH_SEDIMG,f"IMG{num}n.png")
+
+    if os.path.isfile(fullfilename_image):
+        #print(f"Found Filename {fullfilename_image}") 
+        pass
+    else:
+        print(f">>> Filename {fullfilename_image} NOT found") 
+    return fullfilename_image
 
 def convertflambda_to_fnu(wl:np.array, flambda:np.array) -> np.array:
     """

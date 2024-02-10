@@ -1,14 +1,17 @@
 from .fors2starlightio import (FILENAME_FORS2PHOTOM, FILENAME_STARLIGHT,
+                               FILEPATH_SEDIMG,
                                FULL_FILENAME_FORS2PHOTOM,
                                FULL_FILENAME_STARLIGHT, Fors2DataAcess,
-                               SLDataAcess, _getPackageDir,
+                               SLDataAcess, _getPackageDir,get_specimg,get_specimgfile,
                                convert_flux_toobsframe,
                                convert_flux_torestframe, convertflambda_to_fnu,
                                flux_norm, gpr, kernel, ordered_keys)
 
 __all__ = ["_getPackageDir",
+           "get_specimg","get_specimgfile",
            "FILENAME_FORS2PHOTOM",
            "FILENAME_STARLIGHT",
+           "FILEPATH_SEDIMG",
            "FULL_FILENAME_FORS2PHOTOM",
            "FULL_FILENAME_STARLIGHT",
            "ordered_keys",
