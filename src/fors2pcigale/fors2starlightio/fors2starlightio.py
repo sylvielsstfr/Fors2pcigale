@@ -353,14 +353,15 @@ class Fors2DataAcess():
 
         # calculate the magnitude from Fors2 spectrum
         photmagcalc_sdss = [filt.ab_mag(wl, fl) for filt in ps.all_filt_sdss]
+        
         # wavelength range where the transmission is above 2%
         wavelengthrange_sdss  = [ filt.wavelength[np.where(filt.transmission>0.02)[0]] for filt in ps.all_filt_sdss]
         wavelengthminmax_sdss = [ (wl.min(),wl.max()) for wl in wavelengthrange_sdss ]
         # select g(1),r(2),i(3)
         wavelengthminmax_sdss = wavelengthminmax_sdss[1:4]
         photmagcalc_sdss = np.array(photmagcalc_sdss)[1:4]
-        photmagdelta_sdss = photmagcalc_sdss - photmagobs_sdss 
-
+        photmagdelta_sdss =  photmagobs_sdss - photmagcalc_sdss
+       
         # remove is spectrum does not extend over filter
         # spectrum not contained in g filter
         if wl.min()> wavelengthminmax_sdss[0][0]:
@@ -377,7 +378,12 @@ class Fors2DataAcess():
         # compute multiplicative factor (erg/cm2/s/AA)
         factor_mean = np.power(10.,-0.4*deltamag_mean)
         factor_err = np.log(10)/2.5* deltamag_sig*factor_mean
-       
+
+        # check if the factor is reasonable
+        photmagcrosscheck_sdss = [filt.ab_mag(wl, factor_mean*fl) for filt in ps.all_filt_sdss][1:4]
+        photmagbias = photmagcrosscheck_sdss - photmagobs_sdss
+        print(specname,"PHOTOMAGBIAS = ",photmagbias, "error-phot = ",photmagobserr_sdss) 
+
         return (factor_mean,factor_err) 
 
 
