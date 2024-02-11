@@ -314,6 +314,43 @@ class Fors2DataAcess():
         else:
             print(f'getspectrum_fromgroup : No group {groupname}')
         return spec_dict
+    
+    def get_specimg(self,specname:str) -> np.array:
+
+        """retrieve the base image of a fors2 spectrum
+        :param specname: name of the spectrum
+        :type specname: str
+        :return: the image of the spectrum (fluw vs wavelengh)
+        :rtype: np.array
+        """
+
+        num = np.array(int(re.findall("^SPEC(.*)",specname)[0])) 
+        fullfilename_image = os.path.join(FULL_FILEPATH_SEDIMG,f"IMG{num}n.png")
+
+        if os.path.isfile(fullfilename_image):
+            arr = plt.imread(fullfilename_image)
+        else:
+            print(f"Filename {fullfilename_image} not found") 
+            arr = np.array([])
+        return arr
+
+    def get_specimgfile(self,specname:str) -> str:
+        """retrieve the base image filename and path of a fors2 spectrum
+        :param specname: name of the spectrum
+        :type specname: str
+        :return: the image of the spectrum (fluw vs wavelengh)
+        :rtype: str
+        """
+
+        num = np.array(int(re.findall("^SPEC(.*)",specname)[0])) 
+        fullfilename_image = os.path.join(FULL_FILEPATH_SEDIMG,f"IMG{num}n.png")
+
+        if os.path.isfile(fullfilename_image):
+            #print(f"Found Filename {fullfilename_image}") 
+            pass
+        else:
+            print(f">>> Filename {fullfilename_image} NOT found") 
+        return fullfilename_image
 
 
 
