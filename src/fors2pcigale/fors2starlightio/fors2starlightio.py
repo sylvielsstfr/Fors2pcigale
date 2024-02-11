@@ -22,7 +22,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from astropy import constants as const
 from astropy import units as u
+
+# for spectrum calibration
+from sedpy import observate
 from sklearn.gaussian_process import GaussianProcessRegressor, kernels
+
+from fors2pcigale.filters import FilterInfo
+
+# utils
+from fors2pcigale.utils.utils_stat import weighted_mean, weighted_variance
 
 kernel = kernels.RBF(0.5, (6000, 10000.0))
 gpr = GaussianProcessRegressor(kernel=kernel ,random_state=0)
@@ -47,6 +55,9 @@ lambda_L = 34500.
 PHOTWL = np.array([lambda_FUV, lambda_NUV, lambda_B, lambda_G, lambda_R ,lambda_I, lambda_Z, lambda_Y, lambda_J, lambda_H, lambda_K ])
 PHOTFilterTag = ['FUV','NUV','B','G','R','I','Z','Y','J','H','Ks']
 
+# need filters transmission for spectrum calibration
+ps = FilterInfo()
+
 def plot_filter_tag(ax,fluxlist):
     """Show the name of the photometric filter
 
@@ -68,6 +79,14 @@ def plot_filter_tag(ax,fluxlist):
                 fl += 2*dy
             ax.text(PHOTWL[idx],fl, PHOTFilterTag[idx],fontsize=16,color="g",weight='bold',ha='center', va='bottom')
 
+def _getPackageDir():
+    """This method must live in the top level of this package, so if this
+    moves to a utils file then the returned path will need to account for that.
+    """
+    dirname = os.path.dirname(__file__)
+    return dirname
+
+
 # ---------------
 ordered_keys = ['name','num','ra','dec', 'redshift','Rmag','RT', 'RV','eRV','Nsp','lines',
                 'ra_galex','dec_galex','fuv_mag', 'fuv_magerr','nuv_mag', 'nuv_magerr',
@@ -83,58 +102,11 @@ ordered_keys = ['name','num','ra','dec', 'redshift','Rmag','RT', 'RV','eRV','Nsp
 FILENAME_FORS2PHOTOM = "data/FORS2spectraGalexKidsPhotom.h5"
 FILENAME_STARLIGHT = "data/SLspectra.h5"
 FILEPATH_SEDIMG = "data/seds/IMG"
-
-
-def _getPackageDir():
-    """This method must live in the top level of this package, so if this
-    moves to a utils file then the returned path will need to account for that.
-    """
-    dirname = os.path.dirname(__file__)
-    return dirname
-
-
-
 FULL_FILENAME_FORS2PHOTOM = os.path.join(_getPackageDir(),FILENAME_FORS2PHOTOM)
 FULL_FILENAME_STARLIGHT = os.path.join(_getPackageDir(),FILENAME_STARLIGHT)
 FULL_FILEPATH_SEDIMG =  os.path.join(_getPackageDir(),FILEPATH_SEDIMG)
 
-def get_specimg(specname:str) -> np.array:
-    """_retrieve the base image of a fors2 spectrum_
 
-    :param specname: name of the spectrum
-    :type specname: str
-    :return: the image of the spectrum (fluw vs wavelengh)
-    :rtype: np.array
-    """
-
-    num = np.array(int(re.findall("^SPEC(.*)",specname)[0])) 
-    fullfilename_image = os.path.join(FULL_FILEPATH_SEDIMG,f"IMG{num}n.png")
-
-    if os.path.isfile(fullfilename_image):
-        arr = plt.imread(fullfilename_image)
-    else:
-        print(f"Filename {fullfilename_image} not found") 
-        arr = np.array([])
-    return arr
-
-def get_specimgfile(specname:str) -> str:
-    """_retrieve the base image filename and path of a fors2 spectrum_
-
-    :param specname: name of the spectrum
-    :type specname: str
-    :return: the image of the spectrum (fluw vs wavelengh)
-    :rtype: str
-    """
-
-    num = np.array(int(re.findall("^SPEC(.*)",specname)[0])) 
-    fullfilename_image = os.path.join(FULL_FILEPATH_SEDIMG,f"IMG{num}n.png")
-
-    if os.path.isfile(fullfilename_image):
-        #print(f"Found Filename {fullfilename_image}") 
-        pass
-    else:
-        print(f">>> Filename {fullfilename_image} NOT found") 
-    return fullfilename_image
 
 def convertflambda_to_fnu(wl:np.array, flambda:np.array) -> np.array:
     """
@@ -351,6 +323,62 @@ class Fors2DataAcess():
         else:
             print(f">>> Filename {fullfilename_image} NOT found") 
         return fullfilename_image
+
+    def get_calibrationfactor(self,specname:str) -> tuple[float,float]:
+        """
+        Calculate calibration factor and its uncertainty for a spectrum from
+        its photometric values
+
+        :param specname: Name of the spectrum
+        :type specname: str
+        :return: The multiplication factor to get the spectrum Flambda in FLAM units (erg/cm2/s/AA)
+        :rtype: tuple[float,float]
+        """
+
+        # get external survey photometric measurements
+        photmagobs,photmagobserr = self.get_photmagnitudes(specname)
+        # select g(3),r(4),i(5) filters usefull for spectroscopy
+        photmagobs_sdss =  photmagobs[3:6]
+        photmagobserr_sdss =  photmagobserr[3:6]
+       
+        # retrieve the parameter for this spectrum
+        #attr = self.getattribdata_fromgroup(specname)
+        #redshift = attr['redshift']
+        #lines = attr['lines']
+       
+        # retrieve this spectrum
+        the_dict_sed =  self.getspectrum_fromgroup(specname)
+        wl = the_dict_sed["wl"] 
+        fl = the_dict_sed["fl"] 
+
+        # calculate the magnitude from Fors2 spectrum
+        photmagcalc_sdss = [filt.ab_mag(wl, fl) for filt in ps.all_filt_sdss]
+        # wavelength range where the transmission is above 2%
+        wavelengthrange_sdss  = [ filt.wavelength[np.where(filt.transmission>0.02)[0]] for filt in ps.all_filt_sdss]
+        wavelengthminmax_sdss = [ (wl.min(),wl.max()) for wl in wavelengthrange_sdss ]
+        # select g(1),r(2),i(3)
+        wavelengthminmax_sdss = wavelengthminmax_sdss[1:4]
+        photmagcalc_sdss = np.array(photmagcalc_sdss)[1:4]
+        photmagdelta_sdss = photmagcalc_sdss - photmagobs_sdss 
+
+        # remove is spectrum does not extend over filter
+        # spectrum not contained in g filter
+        if wl.min()> wavelengthminmax_sdss[0][0]:
+            photmagdelta_sdss[0] = np.nan
+        # spectrum not contained in i filter
+        if wl.max() <  wavelengthminmax_sdss[-1][1]:
+            photmagdelta_sdss[-1] = np.nan
+        mask = ~np.isnan(photmagdelta_sdss)
+       
+        # shift in magnitude between the survey photometry/ fors2 data
+        deltamag_mean = weighted_mean(photmagdelta_sdss[mask],1./photmagobserr_sdss[mask]**2)
+        deltamag_sig = np.sqrt(weighted_variance(photmagdelta_sdss[mask],1./photmagobserr_sdss[mask]**2))
+       
+        # compute multiplicative factor (erg/cm2/s/AA)
+        factor_mean = np.power(10.,-0.4*deltamag_mean)
+        factor_err = np.log(10)/2.5* deltamag_sig*factor_mean
+       
+        return (factor_mean,factor_err) 
 
 
 
