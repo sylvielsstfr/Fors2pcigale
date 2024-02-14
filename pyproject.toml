@@ -98,5 +98,6 @@ namespaces = true  # to activate scanning PEP 420 namespaces (true by default)
 
 [tool.setuptools.package-data]
 fors2pcigale = ["*.txt"]
-"fors2pcigale.data" = ["*.h5","*.pickle"]
+"fors2pcigale.data" = ["*.h5","*.pickle","*.png","seds/*.txt","seds/IMG/*.png"]
+
 
