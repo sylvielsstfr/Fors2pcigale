@@ -1,5 +1,6 @@
 # Readme.md
 
+- Last update 2024/04/22
 
 
 - info from GELATO : https://github.com/TheSkyentist/GELATO
@@ -29,3 +30,15 @@ ln -s ../spec_forgelato spec_forgelato
 python ../Convenience/runGELATO.py ExampleParameters.json object_filelist_v0.fits
 
 
+## Notebooks developped here
+
+- *Example.ipynb* : original notebook provided by GELATO  
+
+- *ProcessMultiSpectraInitial.ipynb* : early adaptation of GELATO notebook  
+
+- *ViewFitResultOneSpectrum.ipynb* : View spectra plots fitted as in the pdf. Overwritten plot functions
+
+- *ViewFitResultMultipleSpectra.ipynb* :   same as *ViewFitResultOneSpectrum.ipynb* but for many Spectra
+
+
+- *ExampleFitInNb.ipynb* : Fit in notebooks selected spectrum
