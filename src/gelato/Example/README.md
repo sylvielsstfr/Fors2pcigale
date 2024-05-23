@@ -1,7 +1,7 @@
 # Readme.md
 
 - Last update 2024/04/22
-- Last update 2024/05/22
+- Last update 2024/05/23
 
 - info from GELATO : https://github.com/TheSkyentist/GELATO
 
@@ -10,7 +10,6 @@
  
 
      python runGELATO.py PARAMS.json --single spectrum.fits z
-
 
      python runGELATO.py PARAMS.json ObjectList.fits 
 
@@ -41,4 +40,5 @@ python ../Convenience/runGELATO.py ExampleParameters.json object_filelist_v0.fit
 - *ViewFitResultMultipleSpectra.ipynb* :   same as *ViewFitResultOneSpectrum.ipynb* but for many Spectra
 
 
-- *ExampleFitInNb.ipynb* : Fit in notebooks selected spectrum
+- *ExampleFitInNb.ipynb* : Fit in notebooks selected spectrum. Use the ExampleParametersFitInNb.json which defines ``ResultsFitInNb/``
+  
