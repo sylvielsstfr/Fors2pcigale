@@ -349,9 +349,12 @@ def MyPlotFig(spectrum,model,parameters,fpath,plottype=0):
     fig.suptitle(figname.replace('_','\_')+', $z='+str(np.round(spectrum.z,3))+'$',y=1.0)
     fig.tight_layout()
     #fig.savefig(path.join(spectrum.p['OutFolder'],figname+'.pdf'))
+    fullfigname = os.path.join(spectrum.p['OutFolder'],figname+'.pdf')
+    print(f"save fig {fullfigname}")
+    fig.savefig(fullfigname)
     plt.show()
     #pyplot.close(fig)
-    return  all_pulls
+    return all_pulls
 
 
 
