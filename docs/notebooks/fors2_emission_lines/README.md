@@ -6,6 +6,8 @@ Tools to prepare io for gelato to measure emission lones
 - affiliation : IJCLab/IN2P3/CNRS
 - creation date : 2024-02-13
 - update : 2024-02-15
+- Last update : 2024-05-24
+
 
 ## 1) Compare spectrum in observation frame with spectrum redshifted in restframe
 
@@ -23,6 +25,7 @@ Tools to prepare io for gelato to measure emission lones
 
 ## 5)  Calculate background on calibrated flux
 - **AccessFors2Spectra_calculatebackground.ipynb** : This is the file that generate the fits input to gelato. It handle different version to compute the flux inverse variance.  Perhaps this is the thing that allow good detection of strong emission lines by gelato
+- Note that in May 24th 2024 an implementation of version table v2 to recalibrate the errors and remove Nans
   
 ## 6)  Calculate photon count calibrated flux
 - **AccessFors2Spectra_calculatephotoncount.ipynb** : Try to guess the irreducible photoelectron count to guess the true statistical error on flux. The true statistical error has to be implemented in **AccessFors2Spectra_calculatebackground.ipynb**
