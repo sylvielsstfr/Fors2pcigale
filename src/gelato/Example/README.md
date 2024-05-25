@@ -1,7 +1,7 @@
 # Readme.md
 
 - Last update 2024/04/22
-- Last update 2024/05/23
+- Last update 2024/05/25
 
 - info from GELATO : https://github.com/TheSkyentist/GELATO
 
@@ -39,6 +39,15 @@ python ../Convenience/runGELATO.py ExampleParameters.json object_filelist_v0.fit
 
 - *ViewFitResultMultipleSpectra.ipynb* :   same as *ViewFitResultOneSpectrum.ipynb* but for many Spectra
 
-
 - *ExampleFitInNb.ipynb* : Fit in notebooks selected spectrum. Use the ExampleParametersFitInNb.json which defines ``ResultsFitInNb/``
+
+-*ExampleFitInNb_loop.ipynb*: Fit spectra one by one in a loop
+
+-*DumpRunProcessingStatus.ipynb*:  Dump the file containing general info on the processing
+
+-*ExampleFitInNb_Review_loop.ipynb*: Review all fitted spectra or not fitted
+
+-*ExampleFitInNb_ReviewGoods_loop.ipynb*: Review only good fitted spectra, not bad
+
+
   

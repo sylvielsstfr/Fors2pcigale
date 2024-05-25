@@ -1,0 +1,165 @@
+{
+    "OutFolder": "./ResultsFitInNb_v3",
+    "VacuumWav": true,
+    "RandomSeed": 1,
+    "LineRegion": 300,
+    "ContinuumRegion": 15000,
+    "NBoot": 100,
+    "FThresh": 0.95,
+    "NProcess": 1,
+    "Plotting": true,
+    "FlamUnits": "$10^{-17}$ erg cm$^{-2}$ s$^{-1}$ \\AA$^{-1}$",
+    "CalcEW": true,
+    "Concatenate": true,
+    "Overwrite": true,
+    "Verbose": true,
+    "EmissionGroups": [
+        {
+            "Name":"AGN",
+            "TieRedshift": true,
+            "TieDispersion": false,
+            "Species": [
+                {
+                    "Name":"[SII]",
+                    "Flag": 0,
+                    "FlagGroups": [],
+                    "Lines": [
+                        {
+                            "Wavelength": 6718.29,
+                            "RelStrength": null
+                        },
+                        {
+                            "Wavelength":  6732.67,
+                            "RelStrength": null
+                        }
+                    ]
+                },
+                {
+                    "Name":"[NII]",
+                    "Flag": 0,
+                    "FlagGroups": [],
+                    "Lines": [
+                        {
+                            "Wavelength": 6585.27,
+                            "RelStrength": 1
+                        },
+                        { 
+                            "Wavelength":  6549.86,
+                            "RelStrength": 0.34
+                        }
+                    ]
+                },
+                {
+                    "Name":"[OIII]",
+                    "Flag": 2,
+                    "FlagGroups": ["Outflow"],
+                    "Lines": [
+                        {
+                            "Wavelength": 5008.240,
+                            "RelStrength": 1
+                        },
+                        { 
+                            "Wavelength": 4960.295,
+                            "RelStrength": 0.35
+                        },
+                        {
+                            "Wavelength": 4364.436,
+                            "RelStrength": null
+                        }
+                    ]
+                },
+                {
+                    "Name":"[NeIII]",
+                    "Flag": 0,
+                    "FlagGroups": [],
+                    "Lines": [
+                        {
+                            "Wavelength": 3869.86,
+                            "RelStrength": null
+                        }
+                    ]
+                },
+                {
+                    "Name":"[NeV]",
+                    "Flag": 0,
+                    "FlagGroups": [],
+                    "Lines": [
+                        {
+                            "Wavelength": 3346.79,
+                            "RelStrength": 1
+                        },
+                        {
+                            "Wavelength": 3426.85,
+                            "RelStrength": 3.4
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name":"SF",
+            "TieRedshift": true,
+            "TieDispersion": true,
+            "Species": [
+                {
+                    "Name":"[OI]",
+                    "Flag": 0,
+                    "FlagGroups": [],
+                    "Lines": [
+                        {
+                            "Wavelength": 6302.046,
+                            "RelStrength": 3
+                        },
+                        { 
+                            "Wavelength": 6365.536,
+                            "RelStrength": 1
+                        }
+                    ]
+                },
+                {
+                    "Name":"[OII]",
+                    "Flag": 0,
+                    "FlagGroups": [],
+                    "Lines": [
+                        {
+                            "Wavelength": 3728.48,
+                            "RelStrength": null
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name":"Balmer",
+            "TieRedshift": true,
+            "TieDispersion": false,
+            "Species": [
+                {
+                    "Name":"HI",
+                    "Flag": 1,
+                    "FlagGroups": ["Balmer"],
+                    "Lines": [
+                        {
+                            "Wavelength": 6564.61,
+                            "RelStrength": null
+                        },
+                        {
+                            "Wavelength": 4862.68,
+                            "RelStrength": null
+                        },
+                        {
+                            "Wavelength": 4341.68,
+                            "RelStrength": null
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name":"Outflow",
+            "TieRedshift": true,
+            "TieDispersion": true,
+            "Species": []
+        }
+    ]
+}

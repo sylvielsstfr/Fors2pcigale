@@ -11,7 +11,7 @@
 # 
 # - author : Sylvie Dagoret-Campagne
 # - creation date : 2024-03-25
-# - update : 2024-05-23
+# - update : 2024-05-25 : write png images
 # 
 # 
 # - Kernel at CCIN2P3 : ``conda_desc_py310_pcigale``
@@ -349,9 +349,12 @@ def MyPlotFig(spectrum,model,parameters,fpath,plottype=0):
     fig.suptitle(figname.replace('_','\_')+', $z='+str(np.round(spectrum.z,3))+'$',y=1.0)
     fig.tight_layout()
     #fig.savefig(path.join(spectrum.p['OutFolder'],figname+'.pdf'))
-    fullfigname = os.path.join(spectrum.p['OutFolder'],figname+'.pdf')
-    print(f"save fig {fullfigname}")
-    fig.savefig(fullfigname)
+    fullfigname_pdf = os.path.join(spectrum.p['OutFolder'],figname+'.pdf')
+    print(f"save fig {fullfigname_pdf}")
+    fig.savefig(fullfigname_pdf)
+    fullfigname_png = os.path.join(spectrum.p['OutFolder'],figname+'.png')
+    print(f"save fig {fullfigname_png}")
+    fig.savefig(fullfigname_png)
     plt.show()
     #pyplot.close(fig)
     return all_pulls
