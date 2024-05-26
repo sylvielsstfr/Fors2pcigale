@@ -49,5 +49,7 @@ python ../Convenience/runGELATO.py ExampleParameters.json object_filelist_v0.fit
 
 -*ExampleFitInNb_ReviewGoods_loop.ipynb*: Review only good fitted spectra, not bad
 
+-*ExampleFitInNb_ReviewBads_loop.ipynb*: Review list of bads
 
-  
+-*ExampleFitInNb_recoverfitfailure.ipynb*: recover bad fit by splitting spectrum in two parts
+	 
