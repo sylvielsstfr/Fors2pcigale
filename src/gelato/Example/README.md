@@ -1,7 +1,8 @@
 # Readme.md
 
-- Last update 2024/04/22
-- Last update 2024/07/05
+- update 2024/04/22
+- update 2024/07/05
+- Last update 2024/08/26
 
 - info from GELATO : https://github.com/TheSkyentist/GELATO
 
@@ -28,6 +29,7 @@ ln -s ../spec_forgelato spec_forgelato
 - run GELATO
 python ../Convenience/runGELATO.py ExampleParameters.json object_filelist_v0.fits
 
+python ../Convenience/runGELATO.py ExampleParametersFitInNb_v3.json object_filelist_v3.fits
 
 ## Notebooks developped here
 
@@ -59,3 +61,4 @@ Different versions of extracting and calibrating the spectra including the error
 
 - *ExampleFitInNb_recoverfitfailure.ipynb*: recover bad fit by splitting spectrum in two parts
 	 
+- *ExampleFitInNb_AnalyseBuildingAndFittingModel.ipynb*: debug fit of continuum (August 2024)

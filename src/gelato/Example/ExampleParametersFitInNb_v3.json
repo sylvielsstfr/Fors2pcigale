@@ -1,6 +1,6 @@
 {
     "OutFolder": "./ResultsFitInNb_v3",
-    "VacuumWav": true,
+    "VacuumWav": false,
     "RandomSeed": 1,
     "LineRegion": 300,
     "ContinuumRegion": 15000,
