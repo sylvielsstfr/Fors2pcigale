@@ -63,6 +63,10 @@ These files include the spectrum file path, the spectrum name and the redshift.
     - object_filelist_v3.fits
     - object_filelist_v4.fits
 
+### Rregnerate Object sublist
+
+- **ExtractObjectListSubSamples.ipynb** : read old list and extract the last object and make a short list.
+
 ## Run Gelato Fit on multiple spectra
 
       python ../Convenience/runGELATO.py ExampleParameters.json object_filelist_v0.fits
