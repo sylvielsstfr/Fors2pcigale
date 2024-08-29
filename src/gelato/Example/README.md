@@ -2,7 +2,7 @@
 
 - update 2024/04/22
 - update 2024/07/05
-- Last update 2024/08/28
+- Last update 2024/08/29
 
 - info from GELATO : https://github.com/TheSkyentist/GELATO
 
@@ -81,6 +81,14 @@ These files include the spectrum file path, the spectrum name and the redshift.
       python ../Convenience/ewResults.py ExampleParameters.json object_filelist_v0.fits
       python ../Convenience/ewResults.py ExampleParametersFitInNb_v3.json object_filelist_v3.fits
       python ../Convenience/ewResults.py ExampleParametersFitInNb_v4.json object_filelist_v4.fits
+
+## Concatenate all results
+
+      python ../Convenience/concatResults.py ExampleParametersFitInNb_v3.json object_filelist_v3.fits
+      python ../Convenience/concatResults.py ExampleParametersFitInNb_v4.json object_filelist_v4.fits
+
+- the reults can be locked at **CheckConcatenatedGelatoResults.ipynb**.
+
 
 ## Notebooks developped here
 
