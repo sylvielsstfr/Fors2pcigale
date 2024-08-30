@@ -12,6 +12,7 @@
 # - author : Sylvie Dagoret-Campagne
 # - creation date : 2024-03-25
 # - update : 2024-05-25 : write png images
+# - last update : 2024-08-30 : add DecodeParamsFitEmissionLines_allparams
 # 
 # 
 # - Kernel at CCIN2P3 : ``conda_desc_py310_pcigale``
@@ -599,7 +600,7 @@ def DecodeParamsFitEmissionLines(t):
     """
     
     
-    df = pd.DataFrame(columns=['group','line','wl','flux','flux_err','SNR'])
+    df = pd.DataFrame(columns=['group','line','wl','flux','flux_err','flux_SNR'])
     
     index=0
     for col in t.colnames:
@@ -613,10 +614,97 @@ def DecodeParamsFitEmissionLines(t):
                 wavelength = float(col_split[3])
             flux = t[col].mean()
             flux_err = t[col].std()
-            snr = flux/flux_err
-            df.loc[index] = [group_tag,emission_line,wavelength,flux,flux_err,snr]
+            flux_snr = flux/flux_err
+            df.loc[index] = [group_tag,emission_line,wavelength,flux,flux_err,flux_snr]
             index+=1
        
     return df
-        
 
+def DecodeParamsFitEmissionLines_allparams(t):
+    """
+    Decode FitParams Emission Lines
+    
+    input:
+      Astropy result of FitResults
+    output
+      Emission lines fitted  
+    """
+    
+    
+    df = pd.DataFrame(columns=['group','line','wl','flux','flux_err','flux_SNR',
+                               'RAmp','Ramp_err','REW','REW_err','Redshift','Redshift_err',
+                               'Dispersion','Dispersion_err'])
+    
+    index=0
+    emission_line_old = ""  
+    wavelength_old = 0.0
+    # loop on emission lines
+    for col in t.colnames:
+        col_split=col.split("_")
+        group_tag = col_split[0]
+       
+        # narrow emission lines for groups AGN,SF
+        if (group_tag != "SSP") and (group_tag != "PowerLaw") and (group_tag != 'rChi2'):
+            # guess we have an emission line
+            
+            emission_line =  col_split[1]
+            select_col = True
+
+            
+            if group_tag == "AGN" or group_tag == "SF":
+                wavelength = float(col_split[2])
+            elif group_tag == "Outflow":
+                wavelength = float(col_split[3])
+            elif group_tag == "Balmer" and col_split[2] == "Broad":
+                wavelength = float(col_split[3])
+                emission_line += "_Broad"
+            elif group_tag == "Balmer" and col_split[2] != "Broad":
+                wavelength = float(col_split[2])
+            else:
+                print("Unknown group or Species {col}")
+                select_col = False
+
+
+            if emission_line != emission_line_old or wavelength != wavelength_old:
+                emission_line_old = emission_line 
+                wavelength_old = wavelength
+                flux = 0.0
+                ramp = 0.0
+                rw = 0.0
+                red = 0.0
+                disp = 0.0
+            
+            if select_col:
+                if "Flux" in col:
+                    flux = t[col].mean()
+                    flux_err = t[col].std()
+                    flux_snr = flux/flux_err
+                elif "RAmp" in col:
+                    ramp = t[col].mean()
+                    ramp_err = t[col].std()
+                    ramp_snr = ramp/ramp_err
+                elif "REW" in col:
+                    rw = t[col].mean()
+                    rw_err = t[col].std() 
+                elif "Redshift" in col:
+                    red = t[col].mean()
+                    red_err = t[col].std()
+                elif "Dispersion" in col:
+                    disp = t[col].mean()
+                    disp_err = t[col].std()
+                else:
+                    print(f"Unknown column {col}")
+
+             
+
+                if (flux != 0.0) and (ramp != 0.0) and (rw != 0.0) and (red != 0.0) and (
+    disp != 0.0 ): 
+                   
+                    # suppose get here all info related to emission line                   
+                    df.loc[index] = [group_tag,emission_line,wavelength,flux,flux_err,flux_snr,
+                                    ramp,ramp_err,rw,rw_err,red,red_err,disp,disp_err]
+                    index+=1
+       
+    return df
+
+        
